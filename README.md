@@ -5,7 +5,7 @@
 ![Tauri](https://img.shields.io/badge/built%20with-Tauri%202-0EA5E9.svg?logo=tauri&logoColor=white)
 ![Web](https://img.shields.io/badge/web-GitHub%20Pages-brightgreen.svg?logo=github)
 
-Fast offline tool for slicing images into frames and packing them into sprite sheets.
+"Sprite Sheet Packer" is an offline tool for slicing images into frames and packing them into sprite sheets, with built-in generation of .rcss code for the "RmlUi" UI engine. It is designed for creating and editing UI skins for "The Usual Suspects" plugins (Gearmulator / DSP56300 emulator). Available as a desktop app for Windows, macOS and Linux, and as a browser-based web version.
 
 - **"Sheets"** mode builds a separate sheet for every source image.
 - **"Combine"** mode packs frames from all images into one sheet, or exports every frame as its own image ("Only slice").
