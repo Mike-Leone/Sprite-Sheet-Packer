@@ -1,4 +1,4 @@
-# Sprite Sheet Packer
+# <img width="32" height="32" alt="32x32" src="https://github.com/user-attachments/assets/84e05e72-c9e4-4808-addd-22c9267e3834" /> Sprite Sheet Packer 
 
 ![License](https://img.shields.io/badge/license-GPL--3.0-2563EB.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-DB2777.svg)
@@ -17,7 +17,13 @@ Built with [Tauri 2](https://tauri.app).
 
 ---
 
-## Try it in the browser
+## 🖼️ Screenshots
+
+<img width="1332" height="1342" alt="Sprite Sheet Packer" src="https://github.com/user-attachments/assets/7695b8ba-ca85-477e-91ef-d8fa80450c94" />
+
+---
+
+## 🌐 Try it in the browser
 
 A web version (no install, everything runs locally in your browser) is published with GitHub Pages:
 `https://mike-leone.github.io/Sprite-Sheet-Packer/`
@@ -26,7 +32,7 @@ The only difference from the desktop app: files are saved through the browser's 
 
 ---
 
-## Download
+## ⬇️ Download
 
 Get the installer for your system from the [Releases](../../releases) page.
 The builds are **not code-signed**, so the OS will warn you on first launch:
@@ -39,9 +45,9 @@ The builds are **not code-signed**, so the OS will warn you on first launch:
 
 ---
 
-## Manual
+## 📖 Manual
 
-### 1. Quick start
+### 1. ⚡ Quick start
 
 1. Drop images onto **"Drop images here"** (or click to choose files).
 2. For each source, set **"Frame width"** and **"Frame height"**.
@@ -50,7 +56,7 @@ The builds are **not code-signed**, so the OS will warn you on first launch:
 5. Click **"Build"** (`Enter` or `Ctrl+Enter` / `Cmd+Enter`).
 6. Download PNG, ZIP, or copy the generated code.
 
-### 2. Modes
+### 2. 🧩 Modes
 
 #### Sheets
 
@@ -91,7 +97,7 @@ Source card order affects frame order on the sheet.
 
 Useful for batch-cutting sprites without building an atlas.
 
-### 3. Source images
+### 3. 🖼️ Source images
 
 - **Add:** drag-and-drop or click the drop zone (multiple files).
 - **Order:** drag cards to reorder.
@@ -101,7 +107,7 @@ Useful for batch-cutting sprites without building an atlas.
 - **Code style**: Knob or Button; default is Knob.
 - **Collapse all** — collapse or expand all cards.
 
-### 4. Output canvas
+### 4. 📐 Output canvas
 
 Maximum size of one sheet (width × height).
 
@@ -118,7 +124,7 @@ Checkbox in the **"Output canvas"** panel.
 - Build is slightly slower.
 - If the optimized file is larger than the original encode, the original is kept.
 
-### 5. Code style
+### 5. 💻 Code style
 
 Output format is **`.rcss`** (RmlUi / RCSS).
 
@@ -191,7 +197,7 @@ Example:
 
 In **"Combine"**, `@spritesheet` and class names use the combined sheet's **"Name"** field, not the original file names.
 
-### 6. After Build
+### 6. 📦 After Build
 
 Canvases and code appear on the right.
 
@@ -211,7 +217,7 @@ Canvases and code appear on the right.
 - `Ctrl+F` — find, `Ctrl+H` — replace.
 - In **Only slice** the code panel is hidden; **Download ZIP** exports PNGs.
 
-### 7. Keyboard shortcuts
+### 7. ⌨️ Keyboard shortcuts
 
 | Keys                           | Action |
 |--------------------------------|--------|
@@ -223,7 +229,7 @@ Canvases and code appear on the right.
 | **← →**                        | Lightbox — previous / next image |
 | **+ / − and Scroll**           | Lightbox — zoom |
 
-### 8. Export
+### 8. 📤 Export
 
 - **"Download PNG"** — one canvas.
 - **"Download selected"** — selected canvases as ZIP.
@@ -232,7 +238,7 @@ Canvases and code appear on the right.
 
 File names come from the name field on each card.
 
-### 9. Image quality
+### 9. 🔍 Image quality
 
 - Frames are copied **pixel-for-pixel** (no smoothing).
 - Output is **lossless PNG**.
@@ -240,7 +246,7 @@ File names come from the name field on each card.
 - **"Optimize PNG"** reduces weight while keeping pixels 1:1.
 - Exact check: pixel compare (e.g. ImageMagick `compare -metric AE`); `0` means identical. File hashes will still differ.
 
-### 10. Common issues
+### 10. ❓ Common issues
 
 **"Build is disabled"**  
 No source images loaded.
