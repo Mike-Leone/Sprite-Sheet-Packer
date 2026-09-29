@@ -26,7 +26,7 @@ Built with [Tauri 2](https://tauri.app).
 ## 🌐 Try it in the browser
 
 A web version (no install, everything runs locally in your browser) is published with GitHub Pages:
-`https://mike-leone.github.io/Sprite-Sheet-Packer/`
+https://mike-leone.github.io/Sprite-Sheet-Packer/
 
 The only difference from the desktop app: files are saved through the browser's normal download instead of a "Save as" dialog.
 
@@ -242,7 +242,7 @@ File names come from the name field on each card.
 
 - Frames are copied **pixel-for-pixel** (no smoothing).
 - Output is **lossless PNG**.
-- **File size (KB)** may differ from the source due to a different PNG encoder — that is not quality loss.
+- **File size (kb)** may differ from the source due to a different PNG encoder — that is not quality loss.
 - **"Optimize PNG"** reduces weight while keeping pixels 1:1.
 - Exact check: pixel compare (e.g. ImageMagick `compare -metric AE`); `0` means identical. File hashes will still differ.
 
@@ -251,10 +251,10 @@ File names come from the name field on each card.
 **"Build is disabled"**  
 No source images loaded.
 
-**"doesn't divide evenly"**  
+**"Doesn't divide evenly"**  
 Image size is not a multiple of Frame W/H — edge pixels were dropped.
 
-**"frame larger than the canvas"**  
+**"Frame larger than the canvas"**  
 Frame is larger than Output canvas. Only slice does not block on this.
 
 **"Code didn't update after renaming"**  
