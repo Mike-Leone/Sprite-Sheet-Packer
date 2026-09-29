@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sprite Sheet Packer</title>
+<link rel="icon" href="img/favicon.ico" sizes="any">
+<link rel="icon" href="img/favicon.png" type="image/png" sizes="32x32">
+<link rel="icon" href="img/favicon-16.png" type="image/png" sizes="16x16">
+<link rel="stylesheet" href="css/styles.css">
+<script src="vendor/jszip.min.js"></script>
+<script src="vendor/pako.min.js"></script>
+<script src="vendor/upng.js"></script>
+</head>
+<body class="mode-sheets">
+<header class="masthead">
+  <div class="masthead-inner">
+    <img src="img/logo.png" alt="Sprite Sheet Packer" class="logo-main">
+  </div>
+</header>
+
+<div class="qr-lightbox" id="qrLightbox" hidden>
+  <div class="qr-lightbox-backdrop" id="qrLightboxBackdrop"></div>
+  <div class="qr-lightbox-panel" role="dialog" aria-label="Donation QR code">
+    <button type="button" class="qr-lightbox-close" id="qrLightboxClose" aria-label="Close">×</button>
+    <img src="img/qr.png" alt="Donation QR" class="qr-lightbox-img">
+    <a href="https://www.donationalerts.com/r/mikesunrise" target="_blank" rel="noopener noreferrer" class="qr-lightbox-link">DONATION</a>
+  </div>
+</div>
+
+<div class="wrap">
+  <p class="lede">Drop images to slice into frames and pack them into sprite sheets. <strong>Sheets</strong> builds a separate sheet per image; <strong>Combine</strong> packs frames from all images into one sheet (or, with “Only slice”, exports each frame as a separate image). Sheets larger than the canvas size below are split across multiple canvases.</p>
+
+  <div class="grid">
+    <div class="left-col">
+      <div class="panel src-panel">
+        <div class="panel-title-row">
+          <h2>Source images</h2>
+          <button type="button" class="btn-ghost btn-tiny" id="srcCollapseAllBtn" disabled>Collapse all</button>
+        </div>
+        <div class="view-switch pack-switch" id="packSwitch">
+          <div class="switch-slider"></div>
+          <button type="button" data-mode="sheets" class="active">Sheets</button>
+          <button type="button" data-mode="loose">Combine</button>
+        </div>
+        <div class="drop" id="drop">
+          <input type="file" id="fileInput" accept="image/*" multiple>
+          <div class="drop-empty"><strong>Drop images here</strong><br>or click to add</div>
+        </div>
+        <div class="src-scroll" id="srcScroll">
+          <div class="src-list" id="srcList"></div>
+        </div>
+      </div>
+
+      <div class="left-bottom">
+        <div class="panel loose-only panel-compact">
+          <h2>Combined sheet</h2>
+          <div class="field" id="atlasNameField">
+            <label for="atlasName">Name</label>
+            <input type="text" id="atlasName" value="sheet">
+          </div>
+          <div class="field" id="sliceNamesField" hidden>
+            <label>Names</label>
+            <div class="slice-names-list" id="sliceNamesList"></div>
+          </div>
+          <div class="field">
+            <label for="atlasDir">Fill direction</label>
+            <select id="atlasDir"></select>
+          </div>
+          <div class="field" id="atlasCodeStyleField">
+            <label for="atlasCodeStyle">Code style</label>
+            <select id="atlasCodeStyle">
+              <option value="Knob" selected>Knob</option>
+              <option value="Button">Button</option>
+            </select>
+          </div>
+          <div class="field checkbox-field">
+            <label class="chk">
+              <input type="checkbox" id="sliceOnly">
+              <span>Only slice (export individual frames, no packing)</span>
+            </label>
+          </div>
+          <div class="hint">Each image is sliced by its own frame width/height (set per source below), then every resulting frame from every source is packed onto one shared sheet. Enable “Only slice” to export each frame as a separate image instead of packing. Names in generated code come from the Name field above.</div>
+        </div>
+
+        <div class="panel panel-compact">
+          <h2>Output canvas</h2>
+          <div class="row2 canvas-size">
+            <div class="field">
+              <label for="mw">Canvas width, px</label>
+              <div class="num-field">
+                <input type="number" id="mw" min="1" value="2000">
+                <div class="num-steppers"><button type="button" class="num-up"></button><button type="button" class="num-down"></button></div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="mh">Canvas height, px</label>
+              <div class="num-field">
+                <input type="number" id="mh" min="1" value="2000">
+                <div class="num-steppers"><button type="button" class="num-up"></button><button type="button" class="num-down"></button></div>
+              </div>
+            </div>
+          </div>
+          <div class="preset-row" id="canvasPresets">
+            <button type="button" data-size="512">512</button>
+            <button type="button" data-size="1024">1024</button>
+            <button type="button" data-size="2048">2048</button>
+            <button type="button" data-size="4096">4096</button>
+          </div>
+          <div class="field checkbox-field optimize-field">
+            <label class="chk chk-single" title="Re-encodes PNGs after the build with stronger compression. Identical pixels (no quality loss), often resulting in smaller files. Slightly slower. Requires a new build to take effect.">
+              <input type="checkbox" id="optimizePng">
+              <span>Optimize PNG</span>
+            </label>
+          </div>
+          <div class="hint">Any size is allowed. If frames don't fit on one canvas, extra canvases are created: name_0, name_1, etc. A single canvas is not suffixed.</div>
+        </div>
+
+        <div class="panel">
+          <button class="btn-primary" id="genBtn" disabled>Build</button>
+          <div class="progress" id="progress" hidden><div class="progress-bar" id="progressBar"></div></div>
+          <div class="status" id="status"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="main">
+      <div class="empty-main">Packed canvases and generated code will appear here.</div>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <span class="app-footer-dot"></span>
+    <span>Sprite Sheet Packer</span>
+    <span class="app-footer-sep">·</span>
+    <span>by <strong>Mike Leone</strong></span>
+    <button type="button" class="footer-qr" id="footerQrBtn" title="Show QR code" aria-label="Show QR code">
+      <img src="img/qr-small.png" alt="QR Code">
+    </button>
+    <a href="https://www.donationalerts.com/r/mikesunrise" target="_blank" rel="noopener noreferrer" class="footer-donat">DONATION</a>
+  </footer>
+</div>
+
+<div class="code-modal-backdrop" id="codeModalBackdrop"></div>
+<div class="lightbox" id="lightbox">
+  <div class="lb-counter hidden" id="lbCounter"></div>
+  <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Previous image">‹</button>
+  <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Next image">›</button>
+  <div class="lb-stage" id="lbStage">
+    <img id="lightboxImg" src="" alt="" draggable="false">
+  </div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

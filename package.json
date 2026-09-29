@@ -1,0 +1,21 @@
+{
+  "name": "sprite-sheet-packer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Slice images into frames and pack them into sprite sheets. Works offline.",
+  "license": "GPL-3.0-only",
+  "author": "Mike Leone",
+  "type": "module",
+  "scripts": {
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "tauri": "tauri",
+    "web": "python3 -m http.server 8080 --directory src",
+    "test": "node --test",
+    "build:single": "node scripts/build-single.mjs"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2",
+    "esbuild": "^0.28.2"
+  }
+}
