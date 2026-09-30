@@ -1,9 +1,10 @@
 # <img width="32" height="32" alt="32x32" src="https://github.com/user-attachments/assets/84e05e72-c9e4-4808-addd-22c9267e3834" /> Sprite Sheet Packer 
 
-![License](https://img.shields.io/badge/license-GPL--3.0-2563EB.svg)
-![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-DB2777.svg)
-![Tauri](https://img.shields.io/badge/built%20with-Tauri%202-0EA5E9.svg?logo=tauri&logoColor=white)
+![License](https://img.shields.io/badge/license-GPL--3.0-0EA5E9.svg)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-FF5370.svg)
 ![Web](https://img.shields.io/badge/web-GitHub%20Pages-brightgreen.svg?logo=github)
+![UI Framework](https://img.shields.io/badge/UI%20-RmlUI-8173FF.svg)
+![Styles](https://img.shields.io/badge/styles-RCSS-0EA5E9)
 
 "Sprite Sheet Packer" is an offline tool for slicing images into frames and packing them into sprite sheets, with built-in generation of .rcss code for the "RmlUi" UI engine. It is designed for creating and editing UI skins for "The Usual Suspects" plugins (Gearmulator / DSP56300 emulator). Available as a desktop app for Windows, macOS and Linux, and as a browser-based web version.
 
