@@ -14,8 +14,6 @@
 - Generates `.rcss` code in two styles — **"Knob"** and **"Button"**. The code is editable, with find & replace.
 - Exports PNG / ZIP with optional lossless **"Optimize PNG"** re-compression.
 
-Built with [Tauri 2](https://tauri.app).
-
 ---
 
 ## 🖼️ Screenshots
