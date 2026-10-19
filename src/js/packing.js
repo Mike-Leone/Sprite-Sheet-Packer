@@ -34,8 +34,8 @@ function sliceGrid(img, fw, fh, firstIdx, decorate) {
   return frames;
 }
 
-async function finishJob({ name, frames, packed, fw, fh, srcFileName, notes, sliceOnly, codeStyle, optimize, onProgress }) {
-  const canvases = await rasterize(name, frames, packed, { optimize, onProgress });
+async function finishJob({ name, frames, packed, fw, fh, srcFileName, notes, sliceOnly, codeStyle, onProgress }) {
+  const canvases = await rasterize(name, frames, packed, onProgress);
   return {
     name,
     srcFileName,
@@ -50,8 +50,8 @@ async function finishJob({ name, frames, packed, fw, fh, srcFileName, notes, sli
   };
 }
 
-/** Sheets mode: one job per source image. options: { maxW, maxH, optimize, onProgress } */
-export async function buildJob(source, { maxW, maxH, optimize = false, onProgress }) {
+/** Sheets mode: one job per source image. options: { maxW, maxH, onProgress } */
+export async function buildJob(source, { maxW, maxH, onProgress }) {
   const { img, fw, fh, file } = source;
   const frames = sliceGrid(img, fw, fh, 0);
   if (!frames.length) return smallerThanFrame(file.name, fw, fh);
@@ -67,16 +67,15 @@ export async function buildJob(source, { maxW, maxH, optimize = false, onProgres
     notes: note ? [note] : [],
     sliceOnly: false,
     codeStyle: normalizeCodeStyle(source.codeStyle),
-    optimize,
     onProgress
   });
 }
 
 /**
  * Combine mode: frames of all sources on one shared sheet (or one PNG per frame with `sliceOnly`).
- * options: { name, direction, maxW, maxH, sliceOnly, codeStyle, optimize, onProgress }
+ * options: { name, direction, maxW, maxH, sliceOnly, codeStyle, onProgress }
  */
-export async function buildLooseJob(sources, { name, direction, maxW, maxH, sliceOnly = false, codeStyle, optimize = false, onProgress }) {
+export async function buildLooseJob(sources, { name, direction, maxW, maxH, sliceOnly = false, codeStyle, onProgress }) {
   const frames = [];
   const notes = [];
 
@@ -115,7 +114,6 @@ export async function buildLooseJob(sources, { name, direction, maxW, maxH, slic
     notes,
     sliceOnly,
     codeStyle: normalizeCodeStyle(codeStyle),
-    optimize,
     onProgress
   });
 }

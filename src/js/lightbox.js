@@ -9,16 +9,44 @@ const ZOOM_STEPS = [1, 1.15, 1.3, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6, 8];
 const SWIPE_DISTANCE = 60;
 
 let scale = 1, tx = 0, ty = 0;
+let fitW = 0, fitH = 0;
 let dragging = false, moved = false, swiped = false;
 let lastX = 0, lastY = 0, dragDx = 0;
 let gallery = [], index = 0;
 
+/**
+ * Zoom changes the image's real layout size (not a CSS scale), so the browser re-samples the full-size PNG
+ * at every zoom level instead of stretching a bitmap it already rendered at "fit" size.
+ */
 function applyTransform() {
-  image.style.transform = `translate(${Math.round(tx)}px, ${Math.round(ty)}px) scale(${scale})`;
+  if (fitW) {
+    const w = fitW * scale;
+    Object.assign(image.style, {
+      maxWidth: 'none', maxHeight: 'none', flex: 'none',
+      width: `${w}px`, height: `${fitH * scale}px`,
+      // smooth while the picture is shown smaller than its real size, hard pixels once it is magnified
+      imageRendering: w >= image.naturalWidth ? 'pixelated' : 'auto'
+    });
+  }
+  image.style.transform = `translate(${Math.round(tx)}px, ${Math.round(ty)}px)`;
+}
+
+const clearSize = () => {
+  for (const prop of ['width', 'height', 'maxWidth', 'maxHeight', 'flex', 'imageRendering']) image.style[prop] = '';
+};
+
+/** Records the size the image takes when it fits the screen (zoom 1). */
+function measureFit() {
+  clearSize();
+  fitW = image.offsetWidth;
+  fitH = image.offsetHeight;
+  applyTransform();
 }
 
 function resetTransform() {
   scale = 1; tx = 0; ty = 0;
+  fitW = fitH = 0;
+  clearSize();
   applyTransform();
 }
 
@@ -76,6 +104,11 @@ function endDrag() {
   dragging = false;
   lightbox.classList.remove('dragging');
 }
+
+image.addEventListener('load', measureFit);
+window.addEventListener('resize', () => {
+  if (lightbox.classList.contains('active') && fitW) measureFit();
+});
 
 for (const [id, direction] of [['lbPrev', -1], ['lbNext', 1]]) {
   const btn = $(id);

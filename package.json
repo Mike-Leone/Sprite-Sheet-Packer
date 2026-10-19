@@ -1,6 +1,6 @@
 {
   "name": "sprite-sheet-packer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "description": "Slice images into frames and pack them into sprite sheets. Works offline.",
   "license": "GPL-3.0-only",

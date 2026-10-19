@@ -117,7 +117,6 @@ async function runBuild() {
 
   const loose = state.mode === 'loose';
   const sliceOnly = loose && isSliceOnly();
-  const optimize = $('optimizePng').checked;
   const maxW = parseInt(widthInput.value, 10) || DEFAULT_CANVAS_SIZE;
   const maxH = parseInt(heightInput.value, 10) || DEFAULT_CANVAS_SIZE;
   if (!sliceOnly && (maxW < 1 || maxH < 1)) {
@@ -147,14 +146,14 @@ async function runBuild() {
         name: $('atlasName').value,
         direction: $('atlasDir').value,
         codeStyle: $('atlasCodeStyle').value,
-        maxW, maxH, sliceOnly, optimize,
+        maxW, maxH, sliceOnly,
         onProgress: (done, total) => setProgress(done / total)
       }));
     } else {
       for (let i = 0; i < sources.length; i++) {
         setStatus(`Packing "${sources[i].file.name}" (${i + 1}/${sources.length})…`);
         accept(await buildJob(sources[i], {
-          maxW, maxH, optimize,
+          maxW, maxH,
           onProgress: (done, total) => setProgress((i + done / total) / sources.length)
         }));
       }

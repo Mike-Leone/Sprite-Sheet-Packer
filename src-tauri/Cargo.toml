@@ -1,6 +1,6 @@
 [package]
 name = "sprite-sheet-packer"
-version = "1.0.0"
+version = "1.0.1"
 description = "Sprite Sheet Packer — pack image frames into sprite sheets"
 authors = ["Mike Leone"]
 license = "GPL-3.0-only"

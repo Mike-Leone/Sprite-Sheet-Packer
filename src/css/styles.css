@@ -208,10 +208,6 @@ body.slice-only #atlasNameField{ display:none !important; }
 .field.checkbox-field{ margin-bottom:var(--space-2); }
 .field .chk{ display:flex; align-items:flex-start; gap:8px; cursor:pointer; font-size:13px; color:var(--text-dim); margin:0; line-height:1.35; }
 .field .chk input{ margin-top:2px; flex-shrink:0; accent-color:var(--accent); width:15px; height:15px; cursor:pointer; }
-/* Single-line checkbox labels (e.g. Optimize PNG) — center with the box */
-.field .chk.chk-single{ align-items:center; }
-.field .chk.chk-single input{ margin-top:0; }
-.optimize-field{ margin-top:12px; }
 .row2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
 input[type=number], input[type=text]{

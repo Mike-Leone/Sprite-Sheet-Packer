@@ -95,31 +95,34 @@ async function rasterizeOnMainThread(defs, onProgress) {
   return results;
 }
 
+/** Lossless re-encode of every PNG; reports the second half of the progress bar. */
 async function optimizeCanvases(canvases, onProgress) {
+  const total = canvases.length * 2;
   const results = [];
   for (const [i, canvas] of canvases.entries()) {
     const blob = await optimizePng(canvas.blob);
     URL.revokeObjectURL(canvas.url);
     results.push(toResult(blob, canvas.w, canvas.h, canvas.name));
-    onProgress?.(i + 1, canvases.length);
+    onProgress?.(canvases.length + i + 1, total);
   }
   return results;
 }
 
 /**
  * Draws packed frames to PNG canvases: [{ blob, url, w, h, name }].
- * Uses a worker when available; `optimize` re-encodes every PNG losslessly afterwards.
+ * Uses a worker when available, then re-encodes every PNG losslessly (progress: first half drawing, second half re-encoding).
  */
-export async function rasterize(name, frames, packed, { optimize = false, onProgress } = {}) {
+export async function rasterize(name, frames, packed, onProgress) {
   const defs = describeCanvases(name, frames, packed);
+  const drawProgress = onProgress && ((done, total) => onProgress(done, total * 2));
   let canvases = null;
   if (workerSupported) {
     try {
-      canvases = await rasterizeInWorker(defs, onProgress);
+      canvases = await rasterizeInWorker(defs, drawProgress);
     } catch {
       // fall back to the main thread
     }
   }
-  if (!canvases) canvases = await rasterizeOnMainThread(defs, onProgress);
-  return optimize ? optimizeCanvases(canvases, onProgress) : canvases;
+  if (!canvases) canvases = await rasterizeOnMainThread(defs, drawProgress);
+  return optimizeCanvases(canvases, onProgress);
 }
