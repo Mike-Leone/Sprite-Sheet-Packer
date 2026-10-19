@@ -17,6 +17,19 @@ const FIND_BAR_HTML = `
   </div>`;
 
 /**
+ * Replaces ta.value[start, end) through the browser's editing command instead of assigning `ta.value`,
+ * which would wipe the textarea's native undo stack (Ctrl+Z / Ctrl+Y). Fires a normal `input` event.
+ */
+function editText(ta, start, end, text) {
+  ta.focus();
+  ta.setSelectionRange(start, end);
+  const done = text === '' ? document.execCommand('delete') : document.execCommand('insertText', false, text);
+  if (done) return;
+  ta.setRangeText(text, start, end, 'end');
+  ta.dispatchEvent(new Event('input', { bubbles: true }));
+}
+
+/**
  * Editable, syntax-highlighted code box with a Ctrl+F / Ctrl+H find & replace bar.
  * `job.code` is kept in sync with the textarea. The bar is appended to `barHost`.
  */
@@ -77,15 +90,19 @@ export function wireCodeEditor(codeWrap, job, barHost) {
   function replaceCurrent() {
     if (current < 0 || !matches.length) return;
     const at = matches[current];
-    ta.value = ta.value.slice(0, at) + replace.value + ta.value.slice(at + find.value.length);
-    commit();
+    editText(ta, at, at + find.value.length, replace.value);
     refresh(false);
   }
 
   function replaceAll() {
     if (!find.value) return;
-    ta.value = ta.value.replace(new RegExp(escapeRegExp(find.value), 'gi'), () => replace.value);
-    commit();
+    const next = ta.value.replace(new RegExp(escapeRegExp(find.value), 'gi'), () => replace.value);
+    if (next !== ta.value) {
+      const { scrollTop, scrollLeft } = ta;
+      editText(ta, 0, ta.value.length, next);
+      ta.scrollTop = scrollTop;
+      ta.scrollLeft = scrollLeft;
+    }
     refresh(true);
   }
 
@@ -121,10 +138,7 @@ export function wireCodeEditor(codeWrap, job, barHost) {
     const mod = e.ctrlKey || e.metaKey;
     if (e.key === 'Tab') {
       e.preventDefault();
-      const { selectionStart: start, selectionEnd: end } = ta;
-      ta.value = `${ta.value.slice(0, start)}  ${ta.value.slice(end)}`;
-      ta.selectionStart = ta.selectionEnd = start + 2;
-      commit();
+      editText(ta, ta.selectionStart, ta.selectionEnd, '  ');
     } else if (mod && e.code === 'KeyF') {
       e.preventDefault();
       openBar(false);
