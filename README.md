@@ -12,7 +12,7 @@
 - **"Combine"** mode packs frames from all images into one sheet, or exports every frame as its own image ("Only slice").
 - Eight fill directions, canvas size presets, automatic splitting across several canvases.
 - Generates `.rcss` code in two styles — **"Knob"** and **"Button"**. The code is editable, with find & replace.
-- Exports PNG / ZIP with optional lossless **"Optimize PNG"** re-compression.
+- Exports PNG / ZIP.
 
 ---
 
@@ -51,7 +51,7 @@ The builds are **not code-signed**, so the OS will warn you on first launch:
 1. Drop images onto **"Drop images here"** (or click to choose files).
 2. For each source, set **"Frame width"** and **"Frame height"**.
 3. Choose **"Sheets"** or **"Combine"**.
-4. Adjust the output canvas size and options ("Code style", "Optimize PNG") if needed.
+4. Adjust the output canvas size and options ("Code style") if needed.
 5. Click **"Build"** (`Enter` or `Ctrl+Enter` / `Cmd+Enter`).
 6. Download PNG, ZIP, or copy the generated code.
 
@@ -113,15 +113,6 @@ Maximum size of one sheet (width × height).
 - Presets: 512, 1024, 2048, 4096.
 - If frames don't fit — files are named `name_0`, `name_1`, …
 - A single sheet has no numeric suffix.
-
-#### Optimize PNG (lossless)
-
-Checkbox in the **"Output canvas"** panel.
-
-- After packing, PNGs are **re-encoded without quality loss** (identical pixels).
-- Files are often smaller (more noticeable on flat UI sprites; noisy frames may shrink only a little).
-- Build is slightly slower.
-- If the optimized file is larger than the original encode, the original is kept.
 
 ### 5. 💻 Code style
 
@@ -242,7 +233,6 @@ File names come from the name field on each card.
 - Frames are copied **pixel-for-pixel** (no smoothing).
 - Output is **lossless PNG**.
 - **File size (kb)** may differ from the source due to a different PNG encoder — that is not quality loss.
-- **"Optimize PNG"** reduces weight while keeping pixels 1:1.
 - Exact check: pixel compare (e.g. ImageMagick `compare -metric AE`); `0` means identical. File hashes will still differ.
 
 ### 10. ❓ Common issues
@@ -258,9 +248,6 @@ Frame is larger than Output canvas. Only slice does not block on this.
 
 **"Code didn't update after renaming"**  
 Renaming a canvas card should update the code automatically. If you edited the code by hand, fix it or run Build again.
-
-**"Optimize PNG barely reduced size"**  
-The image was already well compressed or is hard for PNG (noise/photo). Flat UI sprites usually shrink more.
 
 ---
 
